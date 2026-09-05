@@ -1,11 +1,11 @@
 .game-screen {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-lg);
   width: 100%;
   max-width: 980px;
   margin: 0 auto;
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg) var(--spacing-xl);
 }
 
 /* Fila con el tablero centrado y las bandejas de capturas a cada lateral.
