@@ -75,8 +75,9 @@ function isRookLeavingHomeSquare(move, row) {
   return move.piece === PIECE_TYPES.ROOK && move.from.row === row;
 }
 
-// Actualiza los derechos de enroque tras una jugada: rey movido, torre movida o capturada
-function updateCastlingRights(castlingRights, move) {
+// Actualiza los derechos de enroque tras una jugada: rey movido, torre movida o capturada.
+// Se exporta para que el bot pueda simular estados intermedios en su búsqueda.
+export function updateCastlingRights(castlingRights, move) {
   const next = {
     [WHITE]: { ...castlingRights[WHITE] },
     [BLACK]: { ...castlingRights[BLACK] },
