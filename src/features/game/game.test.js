@@ -256,3 +256,40 @@ describe('deshacer', () => {
     expect(undone.castlingRights[WHITE].queenSide).toBe(true);
   });
 });
+
+describe('capturas registradas', () => {
+  it('registra la pieza comida con su color en jugadas tranquilas y capturas', () => {
+    let game = play(createGame(), 'e2e4');
+    expect(game.capturedPieces).toHaveLength(0);
+
+    // 1. e4 d5 2. exd5: el blanco come un peón negro
+    game = play(game, 'd7d5');
+    game = play(game, 'e4d5');
+    expect(game.capturedPieces).toEqual([{ type: PIECE_TYPES.PAWN, color: BLACK }]);
+
+    // 2... Dxd5: la dama negra come el peón blanco
+    game = play(game, 'd8d5');
+    expect(game.capturedPieces).toEqual([
+      { type: PIECE_TYPES.PAWN, color: BLACK },
+      { type: PIECE_TYPES.PAWN, color: WHITE },
+    ]);
+  });
+
+  it('registra la captura al paso como un peón comido', () => {
+    let game = play(createGame(), 'e2e4');
+    game = play(game, 'a7a6');
+    game = play(game, 'e4e5');
+    game = play(game, 'd7d5');
+    game = play(game, 'e5d6');
+    expect(game.capturedPieces).toEqual([{ type: PIECE_TYPES.PAWN, color: BLACK }]);
+  });
+
+  it('al deshacer una captura se restaura la lista de piezas comidas', () => {
+    let game = play(createGame(), 'e2e4');
+    game = play(game, 'd7d5');
+    game = play(game, 'e4d5');
+    expect(game.capturedPieces).toHaveLength(1);
+    const undone = undoMove(game);
+    expect(undone.capturedPieces).toHaveLength(0);
+  });
+});

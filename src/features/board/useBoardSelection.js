@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-// Hook de selección del tablero 3D:
+// Hook de selección del tablero:
 // - Un clic en una pieza propia la selecciona (o cambia la selección).
 // - Un clic en un destino legal de la pieza seleccionada ejecuta la jugada.
 // - Un clic en cualquier otra casilla limpia la selección.

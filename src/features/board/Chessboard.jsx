@@ -1,35 +1,29 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
+import { BOARD_SIZE } from '@/features/game/constants.js';
+import { toAlgebraic } from '@/features/game/board.js';
 import { getLegalMoves, isInCheck, findKing } from '@/features/game/moves.js';
 import { applyMoveToBoard } from '@/features/game/apply.js';
 import { useBoardSelection } from './useBoardSelection.js';
-import { createBoardScene } from './scene.js';
+import Piece from './Piece.jsx';
+import { PIECE_NAMES } from './glyphs.js';
 import './Chessboard.css';
 
-// Lee los colores del tablero desde los tokens de diseño (custom properties de CSS)
-function readBoardColors() {
-  const styles = getComputedStyle(document.documentElement);
-  const read = (token) => {
-    const value = styles.getPropertyValue(token).trim();
-    return value === '' ? null : parseInt(value.replace('#', ''), 16);
-  };
-  return {
-    boardLight: read('--color-board-light'),
-    boardDark: read('--color-board-dark'),
-    frame: read('--color-surface'),
-    selection: read('--color-selection'),
-    target: read('--color-move-hint'),
-    capture: read('--color-capture-hint'),
-    lastMove: read('--color-last-move'),
-    check: read('--color-error'),
-  };
+// Marca una casilla como casilla clara u oscura: a1 (fila 7) es oscura en ajedrez
+function isLightSquare(row, col) {
+  return (row + col) % 2 === 1;
 }
 
-// Tablero de ajedrez en 3D con three.js. Recibe el estado de la partida y el
-// callback de jugada; la selección y los movimientos legales se calculan aquí.
-function Chessboard({ board, turn, lastMove, disabled = false, onMove }) {
-  const containerRef = useRef(null);
-  const sceneRef = useRef(null);
+// Texto accesible de una casilla: coordenadas y pieza que la ocupa, si la hay
+function squareLabel(row, col, piece) {
+  const coordinates = toAlgebraic(row, col);
+  if (piece === null) return coordinates;
+  const colorName = piece.color === 'white' ? 'blanco' : 'negro';
+  return `${coordinates}, ${PIECE_NAMES[piece.type]} ${colorName}`;
+}
 
+// Tablero de ajedrez en HTML y CSS: casillas clicables con selección, destinos
+// legales, última jugada y resaltado del jaque
+function Chessboard({ board, turn, lastMove = null, disabled = false, onMove }) {
   // Movimientos legales del turno, usados para la selección y los resaltes
   const legalMoves = useMemo(
     () => (disabled ? [] : getLegalMoves(board, turn, { applyMoveToBoardFn: applyMoveToBoard })),
@@ -44,70 +38,95 @@ function Chessboard({ board, turn, lastMove, disabled = false, onMove }) {
     onMove,
   });
 
-  // Referencia al handler actualizado: la escena se suscribe una sola vez al montar
-  // y debe leer siempre la última versión del callback (evita closures obsoletos)
-  const handleSquareClickRef = useRef(handleSquareClick);
-  useEffect(() => {
-    handleSquareClickRef.current = handleSquareClick;
-  }, [handleSquareClick]);
+  // La selección solo cuenta si la casilla aún guarda una pieza del jugador en turno;
+  // así se descarta sola tras deshacer, reiniciar o mover el rival
+  const selectedPiece = selection !== null ? (board[selection.row]?.[selection.col] ?? null) : null;
+  const activeSelection = selectedPiece !== null && selectedPiece.color === turn ? selection : null;
 
-  // Casilla del rey en jaque (para resaltarla en rojo)
+  // Destinos legales de la pieza seleccionada, clasificados por captura o no
+  const selectionMoves = useMemo(() => {
+    if (activeSelection === null) return [];
+    return legalMoves.filter(
+      (move) => move.from.row === activeSelection.row && move.from.col === activeSelection.col,
+    );
+  }, [legalMoves, activeSelection]);
+
+  const targetKeys = useMemo(() => {
+    const keys = new Set();
+    const captures = new Set();
+    for (const move of selectionMoves) {
+      const key = `${move.to.row},${move.to.col}`;
+      keys.add(key);
+      if (move.capturedType !== null) captures.add(key);
+    }
+    return { keys, captures };
+  }, [selectionMoves]);
+
+  // Casilla del rey en jaque (se resalta en rojo)
   const checkSquare = useMemo(() => {
     if (disabled) return null;
     return isInCheck(board, turn) ? findKing(board, turn) : null;
   }, [board, turn, disabled]);
 
-  // Crea y destruye la escena three.js al montar/desmontar
-  useEffect(() => {
-    const canvas = document.createElement('canvas');
-    containerRef.current.appendChild(canvas);
-    const scene = createBoardScene(canvas, {
-      colors: readBoardColors(),
-      onSquareClick: (row, col) => handleSquareClickRef.current(row, col),
-    });
-    sceneRef.current = scene;
+  const checkKey = checkSquare !== null ? `${checkSquare.row},${checkSquare.col}` : null;
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (entry !== undefined) {
-        scene.resize(entry.contentRect.width, entry.contentRect.height);
-      }
-    });
-    resizeObserver.observe(containerRef.current);
+  const squares = Array.from({ length: BOARD_SIZE }, (_, row) =>
+    Array.from({ length: BOARD_SIZE }, (_, col) => {
+      const piece = board[row][col];
+      const key = `${row},${col}`;
+      const selected =
+        activeSelection !== null && activeSelection.row === row && activeSelection.col === col;
+      const isTarget = targetKeys.keys.has(key);
+      const isCapture = targetKeys.captures.has(key);
+      const isLastMove =
+        (lastMove !== null && lastMove.from.row === row && lastMove.from.col === col) ||
+        (lastMove !== null && lastMove.to.row === row && lastMove.to.col === col);
+      const isCheck = checkKey === key;
 
-    return () => {
-      resizeObserver.disconnect();
-      scene.dispose();
-      sceneRef.current = null;
-      canvas.remove();
-    };
-  }, []);
+      const markers = [];
+      if (isLastMove)
+        markers.push(<span key="last" className="board__marker board__marker--last-move" />);
+      if (isCheck)
+        markers.push(<span key="check" className="board__marker board__marker--check" />);
+      if (selected)
+        markers.push(<span key="selected" className="board__marker board__marker--selection" />);
 
-  // Sincroniza las piezas del tablero con la escena
-  useEffect(() => {
-    sceneRef.current?.setBoard(board);
-  }, [board]);
+      const className = [
+        'board__square',
+        isLightSquare(row, col) ? 'board__square--light' : 'board__square--dark',
+      ]
+        .filter(Boolean)
+        .join(' ');
 
-  // Sincroniza los resaltes (selección, destinos, última jugada y jaque)
-  useEffect(() => {
-    const selectedMoves = selection === null ? [] : legalMoves;
-    const targets = selectedMoves
-      .filter((move) => move.from.row === selection.row && move.from.col === selection.col)
-      .map((move) => ({
-        row: move.to.row,
-        col: move.to.col,
-        isCapture: move.capturedType !== null,
-      }));
-    sceneRef.current?.setState({
-      selected: selection,
-      targets,
-      lastMove,
-      checkSquare,
-    });
-  }, [selection, legalMoves, lastMove, checkSquare]);
+      return (
+        <button
+          key={key}
+          type="button"
+          className={className}
+          onClick={() => handleSquareClick(row, col)}
+          disabled={disabled}
+          aria-label={squareLabel(row, col, piece)}
+          aria-pressed={selected}
+        >
+          {markers}
+          {piece !== null && <Piece type={piece.type} color={piece.color} />}
+          {isTarget && (
+            <span
+              className={`board__marker board__marker--target${
+                isCapture ? ' board__marker--capture' : ' board__marker--dot'
+              }`}
+              aria-hidden="true"
+            />
+          )}
+        </button>
+      );
+    }),
+  ).flat();
 
   return (
-    <div className="chessboard" ref={containerRef} aria-label="Tablero de ajedrez 3D" role="grid" />
+    <div className="chessboard" role="grid" aria-label="Tablero de ajedrez">
+      {squares}
+    </div>
   );
 }
 
