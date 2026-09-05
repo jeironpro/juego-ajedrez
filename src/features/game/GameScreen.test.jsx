@@ -41,7 +41,6 @@ function renderGameScreen(props = {}) {
       onUndo={vi.fn()}
       onRestart={vi.fn()}
       onMenu={vi.fn()}
-      onGameOver={vi.fn()}
       player1Name="TÚ"
       player2Name="BOT"
       {...props}
@@ -54,6 +53,18 @@ describe('GameScreen', () => {
     renderGameScreen();
     expect(screen.getByText('TÚ')).toBeInTheDocument();
     expect(screen.getByText('BOT')).toBeInTheDocument();
+  });
+
+  it('arranca con 16 piezas por jugador', () => {
+    renderGameScreen();
+    expect(screen.getAllByText('16')).toHaveLength(2);
+  });
+
+  it('descuenta piezas al bando que pierde una captura', () => {
+    renderGameScreen({ game: gameWithCapture() });
+    // Las blancas comieron un peón negro: TÚ sigue con 16 y BOT baja a 15
+    expect(screen.getByText('16')).toBeInTheDocument();
+    expect(screen.getByText('15')).toBeInTheDocument();
   });
 
   it('deshabilita deshacer al inicio de la partida', () => {
@@ -83,34 +94,10 @@ describe('GameScreen', () => {
     expect(screen.getByText('El bot está pensando…')).toBeInTheDocument();
   });
 
-  it('muestra el modal de fin de partida y notifica el ganador', () => {
-    const onGameOver = vi.fn();
+  it('muestra el modal de fin de partida con el ganador', () => {
     const game = { ...createGame(), over: true, winner: WHITE, endReason: 'checkmate' };
-    renderGameScreen({ game, onGameOver, botMode: true });
+    renderGameScreen({ game, botMode: true });
     expect(screen.getByText('¡Ganaste!')).toBeInTheDocument();
-    expect(onGameOver).toHaveBeenCalledWith(WHITE);
-  });
-
-  it('notifica el ganador una sola vez aunque el padre se vuelva a renderizar', () => {
-    const onGameOver = vi.fn();
-    const game = { ...createGame(), over: true, winner: WHITE, endReason: 'checkmate' };
-    // El callback cambia de identidad en cada render del padre (como ocurre al
-    // actualizar el marcador): la notificación debe emitirse una única vez
-    const newDelegate = () => () => onGameOver(WHITE);
-    const props = {
-      game,
-      onMove: vi.fn(),
-      onUndo: vi.fn(),
-      onRestart: vi.fn(),
-      onMenu: vi.fn(),
-      player1Name: 'TÚ',
-      player2Name: 'BOT',
-      botMode: true,
-    };
-    const { rerender } = render(<GameScreen {...props} onGameOver={newDelegate()} />);
-    rerender(<GameScreen {...props} onGameOver={newDelegate()} />);
-    rerender(<GameScreen {...props} onGameOver={newDelegate()} />);
-    expect(onGameOver).toHaveBeenCalledTimes(1);
   });
 
   it('no muestra el botón de reiniciar el marcador', () => {

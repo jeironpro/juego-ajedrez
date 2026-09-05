@@ -47,25 +47,25 @@
   color: var(--color-text-primary);
 }
 
-.scoreboard__scores {
+.scoreboard__counts {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   margin-top: var(--spacing-xs);
 }
 
-.scoreboard__score {
+.scoreboard__count {
   font-size: var(--font-size-display);
   font-weight: var(--font-weight-extrabold);
   color: var(--color-text-secondary);
   transition: color 150ms ease;
 }
 
-.scoreboard__score--active {
+.scoreboard__count--active {
   color: var(--color-primary);
 }
 
-.scoreboard__score:nth-child(3) {
+.scoreboard__count:nth-child(3) {
   text-align: right;
 }
 

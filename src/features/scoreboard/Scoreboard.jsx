@@ -1,8 +1,16 @@
 import './Scoreboard.css';
 
-// Marcador superior: badge (dificultad/modo), nombres de los jugadores y contadores
-// de victorias acumuladas; el jugador en turno queda resaltado
-function Scoreboard({ player1Name, player2Name, player1Score, player2Score, badge = null, turn }) {
+// Marcador superior: badge (dificultad/modo), nombres de los jugadores y piezas
+// restantes de cada uno (16 al inicio, descuentan al capturar); el jugador en
+// turno queda resaltado
+function Scoreboard({
+  player1Name,
+  player2Name,
+  player1Pieces = 16,
+  player2Pieces = 16,
+  badge = null,
+  turn,
+}) {
   const player1Active = turn === 'white';
   const player2Active = turn === 'black';
   return (
@@ -20,13 +28,13 @@ function Scoreboard({ player1Name, player2Name, player1Score, player2Score, badg
           {player2Name}
         </span>
       </div>
-      <div className="scoreboard__scores">
-        <span className={`scoreboard__score${player1Active ? ' scoreboard__score--active' : ''}`}>
-          {player1Score}
+      <div className="scoreboard__counts">
+        <span className={`scoreboard__count${player1Active ? ' scoreboard__count--active' : ''}`}>
+          {player1Pieces}
         </span>
         <span className="scoreboard__vs">vs</span>
-        <span className={`scoreboard__score${player2Active ? ' scoreboard__score--active' : ''}`}>
-          {player2Score}
+        <span className={`scoreboard__count${player2Active ? ' scoreboard__count--active' : ''}`}>
+          {player2Pieces}
         </span>
       </div>
     </section>

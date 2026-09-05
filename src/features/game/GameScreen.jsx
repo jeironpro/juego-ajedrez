@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
 import Button from '@/components/ui/Button.jsx';
 import Scoreboard from '@/features/scoreboard/Scoreboard.jsx';
 import Chessboard from '@/features/board/Chessboard.jsx';
 import CapturedPieces from '@/features/board/CapturedPieces.jsx';
 import GameOverScreen from '@/features/menu/GameOverScreen.jsx';
+import { countPieces } from '@/features/game/board.js';
 import { WHITE, BLACK } from '@/features/game/constants.js';
 import { GAME_END_REASONS } from '@/features/game/constants.js';
 import './GameScreen.css';
@@ -17,17 +17,17 @@ function GameScreen({
   onUndo,
   onRestart,
   onMenu,
-  onGameOver,
   player1Name = 'TÚ',
   player2Name = 'BOT',
   badge = null,
   botMode = false,
-  player1Score = 0,
-  player2Score = 0,
 }) {
   // Piezas comidas por cada jugador: el bando 1 (blancas) acumula piezas negras
   const player1Captures = game.capturedPieces.filter((piece) => piece.color === BLACK);
   const player2Captures = game.capturedPieces.filter((piece) => piece.color === WHITE);
+  // Piezas restantes de cada bando: 16 al inicio, descuentan al capturar
+  const player1Pieces = countPieces(game.board, WHITE);
+  const player2Pieces = countPieces(game.board, BLACK);
   const botTurn = botMode && game.turn === BLACK && !game.over;
   const undoDisabled = botTurn || game.undoUsed || game.history.length === 0 || game.over;
 
@@ -44,27 +44,13 @@ function GameScreen({
       ? `¡${winnerName} gana!`
       : '¡Tablas!';
 
-  // Al terminar se informa del resultado una sola vez (guarda por ref): el padre
-  // actualiza el marcador de victorias al recibir el aviso
-  const notifiedRef = useRef(false);
-  useEffect(() => {
-    if (game.over) {
-      if (!notifiedRef.current) {
-        notifiedRef.current = true;
-        onGameOver(game.winner);
-      }
-    } else {
-      notifiedRef.current = false;
-    }
-  }, [game.over, game.winner, onGameOver]);
-
   return (
     <div className="game-screen">
       <Scoreboard
         player1Name={player1Name}
         player2Name={player2Name}
-        player1Score={player1Score}
-        player2Score={player2Score}
+        player1Pieces={player1Pieces}
+        player2Pieces={player2Pieces}
         badge={badge}
         turn={game.turn}
       />
