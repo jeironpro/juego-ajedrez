@@ -1,3 +1,4 @@
+import { WHITE, BLACK } from '@/features/game/constants.js';
 import './Scoreboard.css';
 
 // Marcador superior: badge (dificultad/modo), nombres de los jugadores y piezas
@@ -11,8 +12,8 @@ function Scoreboard({
   badge = null,
   turn,
 }) {
-  const player1Active = turn === 'white';
-  const player2Active = turn === 'black';
+  const player1Active = turn === WHITE;
+  const player2Active = turn === BLACK;
   return (
     <section className="scoreboard" aria-label="Marcador de la partida">
       {badge !== null && (

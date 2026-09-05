@@ -1,5 +1,8 @@
 import { BOARD_SIZE, WHITE, BLACK, PIECE_TYPES } from './constants.js';
 
+// Nombres de las columnas en notación algebraica (de la a a la h)
+const FILES = 'abcdefgh';
+
 // Crea un tablero vacío de 8x8 como matriz de filas (row 0 = octava fila del ajedrez)
 export function createEmptyBoard() {
   return Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(null));
@@ -12,14 +15,12 @@ export function isInsideBoard(row, col) {
 
 // Convierte coordenadas de matriz (row, col) a notación algebraica ("e4")
 export function toAlgebraic(row, col) {
-  const files = 'abcdefgh';
-  return `${files[col]}${BOARD_SIZE - row}`;
+  return `${FILES[col]}${BOARD_SIZE - row}`;
 }
 
 // Convierte notación algebraica ("e4") a coordenadas de matriz { row, col }
 export function fromAlgebraic(square) {
-  const files = 'abcdefgh';
-  const col = files.indexOf(square[0]);
+  const col = FILES.indexOf(square[0]);
   const row = BOARD_SIZE - Number(square.slice(1));
   return { row, col };
 }
@@ -71,7 +72,7 @@ export function switchPlayer(color) {
 }
 
 // Recorre el tablero y aplica un callback sobre cada pieza con su posición
-export function forEachPiece(board, callback) {
+function forEachPiece(board, callback) {
   for (let row = 0; row < BOARD_SIZE; row += 1) {
     for (let col = 0; col < BOARD_SIZE; col += 1) {
       const piece = board[row][col];

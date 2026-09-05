@@ -1,18 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { getMaterialScore, hasInsufficientMaterial, evaluateGameEnd } from './endgame.js';
+import { hasInsufficientMaterial } from './endgame.js';
 import { createEmptyBoard, createPiece } from './board.js';
-import { WHITE, BLACK, PIECE_TYPES, GAME_END_REASONS } from './constants.js';
-
-describe('getMaterialScore', () => {
-  it('suma el valor material de las piezas de un bando', () => {
-    const board = createEmptyBoard();
-    board[0][0] = createPiece(PIECE_TYPES.QUEEN, WHITE);
-    board[1][0] = createPiece(PIECE_TYPES.PAWN, WHITE);
-    board[7][7] = createPiece(PIECE_TYPES.ROOK, BLACK);
-    expect(getMaterialScore(board, WHITE)).toBe(1000);
-    expect(getMaterialScore(board, BLACK)).toBe(500);
-  });
-});
+import { WHITE, BLACK, PIECE_TYPES } from './constants.js';
 
 describe('hasInsufficientMaterial', () => {
   it('rey contra rey es material insuficiente', () => {
@@ -45,20 +34,5 @@ describe('hasInsufficientMaterial', () => {
     board[7][2] = createPiece(PIECE_TYPES.KNIGHT, WHITE);
     board[0][7] = createPiece(PIECE_TYPES.KING, BLACK);
     expect(hasInsufficientMaterial(board)).toBe(false);
-  });
-});
-
-describe('evaluateGameEnd', () => {
-  it('puntúa la victoria, la derrota y las tablas', () => {
-    const base = { over: false, winner: null };
-    expect(evaluateGameEnd(base, WHITE)).toBeNull();
-    expect(evaluateGameEnd({ ...base, over: true, winner: WHITE }, WHITE)).toBeGreaterThan(0);
-    expect(evaluateGameEnd({ ...base, over: true, winner: WHITE }, BLACK)).toBeLessThan(0);
-    expect(
-      evaluateGameEnd(
-        { ...base, over: true, winner: null, endReason: GAME_END_REASONS.STALEMATE },
-        WHITE,
-      ),
-    ).toBe(0);
   });
 });

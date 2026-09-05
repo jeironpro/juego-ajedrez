@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BOARD_SIZE } from '@/features/game/constants.js';
+import { BOARD_SIZE, WHITE } from '@/features/game/constants.js';
 import { toAlgebraic } from '@/features/game/board.js';
 import { getLegalMoves, isInCheck, findKing } from '@/features/game/moves.js';
 import { applyMoveToBoard } from '@/features/game/apply.js';
@@ -17,7 +17,7 @@ function isLightSquare(row, col) {
 function squareLabel(row, col, piece) {
   const coordinates = toAlgebraic(row, col);
   if (piece === null) return coordinates;
-  const colorName = piece.color === 'white' ? 'blanco' : 'negro';
+  const colorName = piece.color === WHITE ? 'blanco' : 'negro';
   return `${coordinates}, ${PIECE_NAMES[piece.type]} ${colorName}`;
 }
 

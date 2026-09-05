@@ -1,4 +1,4 @@
-import { PIECE_VALUES, PIECE_TYPES, WHITE } from '@/features/game/constants.js';
+import { PIECE_VALUES, PIECE_TYPES, WHITE, BLACK } from '@/features/game/constants.js';
 import { getPiecesOfColor } from '@/features/game/board.js';
 
 // Bonificación de avance de peón por fila (cuanto más avanza, más cerca de coronar)
@@ -97,6 +97,6 @@ export function evaluateSide(board, color) {
 
 // Evalúa el tablero desde la perspectiva del color indicado (positivo = mejor para ese color)
 export function evaluateBoard(board, color) {
-  const rival = color === WHITE ? 'black' : 'white';
+  const rival = color === WHITE ? BLACK : WHITE;
   return evaluateSide(board, color) - evaluateSide(board, rival);
 }
