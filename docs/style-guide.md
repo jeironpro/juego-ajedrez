@@ -45,20 +45,23 @@ suaves en cards, color usado solo para comunicar estado y una jerarquía tipogr�
 | `--color-warning` | `#FBCD44` | Advertencia (avisos, confirmaciones)      |
 | `--color-info`    | `#5C98F9` | Información (jugadas del bot, ayudas)     |
 
-### Tablero y piezas 3D
+### Tablero y piezas
 
-| Token                        | Hex       | Uso                                     |
-| ---------------------------- | --------- | --------------------------------------- |
-| `--color-board-light`        | `#EFEAE4` | Casillas claras del tablero             |
-| `--color-board-dark`         | `#B9AC98` | Casillas oscuras del tablero (jugables) |
-| `--color-piece-white`        | `#F5F4F2` | Piezas blancas                          |
-| `--color-piece-white-border` | `#D8D3CB` | Detalles/ borde de las piezas blancas   |
-| `--color-piece-black`        | `#2E2B28` | Piezas negras                           |
-| `--color-piece-black-border` | `#1C1A18` | Detalles/ borde de las piezas negras    |
-| `--color-selection`          | `#5C98F9` | Resalte de la pieza seleccionada        |
-| `--color-move-hint`          | `#73B468` | Puntos de destino de jugadas legales    |
-| `--color-last-move`          | `#FBCD44` | Resalte de la última jugada             |
-| `--color-capture-hint`       | `#DC2626` | Anillo de pieza capturable              |
+| Token                        | Hex       | Uso                                   |
+| ---------------------------- | --------- | ------------------------------------- |
+| `--color-board-light`        | `#EFEAE4` | Casillas claras del tablero           |
+| `--color-board-dark`         | `#B9AC98` | Casillas oscuras del tablero          |
+| `--color-piece-white`        | `#F5F4F2` | Piezas blancas                        |
+| `--color-piece-white-border` | `#D8D3CB` | Detalles/ borde de las piezas blancas |
+| `--color-piece-black`        | `#2E2B28` | Piezas negras                         |
+| `--color-piece-black-border` | `#1C1A18` | Detalles/ borde de las piezas negras  |
+| `--color-selection`          | `#5C98F9` | Resalte de la pieza seleccionada      |
+| `--color-move-hint`          | `#73B468` | Puntos de destino de jugadas legales  |
+| `--color-last-move`          | `#FBCD44` | Resalte de la última jugada           |
+| `--color-capture-hint`       | `#DC2626` | Anillo de pieza capturable            |
+
+Las capturas de cada jugador se muestran como glifos reducidos en una bandeja pegada al lateral
+correspondiente del tablero.
 
 ## 2. Tipografía
 

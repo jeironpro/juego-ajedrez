@@ -62,6 +62,7 @@ export function createGame() {
     fullmoveNumber: 1,
     positionCounts: createInitialPositionCounts(board, WHITE),
     history: [],
+    capturedPieces: [],
     undoUsed: false,
     lastMove: null,
     over: false,
@@ -172,6 +173,15 @@ export function applyMove(game, move) {
     isCastling: move.isCastling,
   };
 
+  // Registro de la pieza capturada: { type, color } con el color de la pieza comida.
+  // Lo consume la interfaz para mostrar las capturas junto a cada jugador.
+  const capturedPiece =
+    move.capturedType === null
+      ? null
+      : { type: move.capturedType, color: switchPlayer(move.color) };
+  const capturedPieces =
+    capturedPiece === null ? game.capturedPieces : [...game.capturedPieces, capturedPiece];
+
   // Instantánea del estado previo para poder deshacer una jugada
   const history = [
     ...game.history,
@@ -183,6 +193,7 @@ export function applyMove(game, move) {
       halfmoveClock: game.halfmoveClock,
       fullmoveNumber: game.fullmoveNumber,
       positionCounts: game.positionCounts,
+      capturedPieces: game.capturedPieces,
       lastMove: game.lastMove,
     },
   ];
@@ -201,6 +212,7 @@ export function applyMove(game, move) {
     fullmoveNumber,
     positionCounts,
     history,
+    capturedPieces,
     undoUsed: game.undoUsed,
     lastMove,
     over: false,
@@ -217,10 +229,12 @@ export function applyMove(game, move) {
   return next;
 }
 
-// Deshace la última jugada (una sola vez por partida); restaura todo el estado previo
-export function undoMove(game) {
+// Deshace las últimas `plies` jugadas (una sola vez por partida); restaura el estado previo.
+// En modo bot la UI pide 2 pliegues para revertir también la respuesta del bot.
+export function undoMove(game, plies = 1) {
   if (game.undoUsed || game.history.length === 0) return game;
-  const previous = game.history[game.history.length - 1];
+  const count = Math.min(plies, game.history.length);
+  const previous = game.history[game.history.length - count];
   return {
     board: previous.board,
     turn: previous.turn,
@@ -229,8 +243,9 @@ export function undoMove(game) {
     halfmoveClock: previous.halfmoveClock,
     fullmoveNumber: previous.fullmoveNumber,
     positionCounts: previous.positionCounts,
+    capturedPieces: previous.capturedPieces,
     lastMove: previous.lastMove,
-    history: game.history.slice(0, -1),
+    history: game.history.slice(0, -count),
     undoUsed: true,
     over: false,
     winner: null,
