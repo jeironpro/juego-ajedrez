@@ -106,3 +106,76 @@
   border-color: var(--color-primary);
   color: var(--color-primary-foreground);
 }
+
+/* Home compacto en ventanas bajas: menos padding y huecos para evitar scroll */
+@media (max-height: 720px) {
+  .home {
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg) var(--spacing-xl);
+  }
+
+  .home__header .material-symbols-rounded {
+    font-size: 40px;
+  }
+
+  .home__mode {
+    padding: var(--spacing-lg) var(--spacing-xl);
+  }
+}
+
+/* Móviles muy estrechos: menos padding horizontal para no partir los textos */
+@media (max-width: 360px) {
+  .home {
+    padding-right: var(--spacing-md);
+    padding-left: var(--spacing-md);
+  }
+}
+
+/* Alturas muy reducidas (móvil en horizontal): compactación máxima para que
+   el menú quepa en pantalla */
+@media (max-height: 520px) {
+  .home {
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-xl);
+  }
+
+  .home__header .material-symbols-rounded {
+    font-size: 28px;
+  }
+
+  .home__title {
+    margin-top: 0;
+    font-size: var(--font-size-title);
+  }
+
+  .home__mode {
+    padding: var(--spacing-sm) var(--spacing-xl);
+    gap: 0;
+  }
+
+  .home__mode .material-symbols-rounded {
+    font-size: 24px;
+  }
+}
+
+/* Pantallas de altura mínima (móvil antiguo en horizontal): se omite el
+   subtítulo y se reduce todo al mínimo para evitar scroll */
+@media (max-height: 360px) {
+  .home {
+    gap: var(--spacing-xs);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .home__subtitle {
+    display: none;
+  }
+
+  .home__header .material-symbols-rounded {
+    font-size: 22px;
+  }
+
+  .home__mode {
+    padding: var(--spacing-xs) var(--spacing-xl);
+  }
+}

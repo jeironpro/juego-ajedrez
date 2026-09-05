@@ -11,3 +11,14 @@
   font-size: clamp(18px, 3.4vw, 30px);
   line-height: 1;
 }
+
+/* Móviles: glifos y contenedor más pequeños para caber en el canal lateral */
+@media (max-width: 640px) {
+  .captured-pieces {
+    min-width: 0;
+  }
+
+  .captured-pieces .piece {
+    font-size: clamp(10px, 3.2vw, 16px);
+  }
+}

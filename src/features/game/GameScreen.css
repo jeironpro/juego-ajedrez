@@ -1,7 +1,9 @@
 .game-screen {
   /* Ancho máximo común de marcador y tablero: limita por altura para no hacer
-     scroll y por ancho para que ambos compartan la misma columna central */
-  --board-max: min(760px, calc(100dvh - 360px));
+     scroll y por ancho para que ambos compartan la misma columna central.
+     La reserva vertical se compacta en pantallas bajas (ver media queries) */
+  --board-reserve: 360px;
+  --board-max: min(760px, calc(100dvh - var(--board-reserve)));
   --board-gutter: clamp(40px, 5vw, 88px);
 
   display: grid;
@@ -74,4 +76,38 @@
 .game-screen__status {
   font-size: var(--font-size-label);
   color: var(--color-text-secondary);
+}
+
+/* Pantallas estrechas: menos padding y canales laterales para que el tablero
+   aproveche mejor el ancho disponible (móviles en vertical) */
+@media (max-width: 640px) {
+  .game-screen {
+    --board-gutter: clamp(8px, 4vw, 32px);
+    padding: var(--spacing-md);
+    row-gap: var(--spacing-sm);
+    column-gap: var(--spacing-sm);
+  }
+}
+
+/* Ventanas poco altas (portátil pequeño o móvil en horizontal): se reduce la
+   reserva vertical — marcador, controles, paddings y huecos se compactan — para
+   que el tablero conserve un tamaño útil sin que la página haga scroll */
+@media (max-height: 720px) {
+  .game-screen {
+    --board-reserve: 240px;
+    padding: var(--spacing-sm) var(--spacing-xl);
+    row-gap: var(--spacing-sm);
+  }
+}
+
+@media (max-height: 600px) {
+  .game-screen {
+    --board-reserve: 220px;
+  }
+}
+
+@media (max-height: 440px) {
+  .game-screen {
+    --board-reserve: 190px;
+  }
 }

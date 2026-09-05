@@ -43,3 +43,24 @@
   gap: var(--spacing-sm);
   width: 100%;
 }
+
+/* El modal se compacta en pantallas pequeñas para no ocupar todo el viewport */
+@media (max-width: 420px) {
+  .game-over__card {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-height: 600px) {
+  .game-over {
+    padding: var(--spacing-md);
+  }
+
+  .game-over__card {
+    padding: var(--spacing-lg) var(--spacing-xl);
+  }
+
+  .game-over__card .material-symbols-rounded {
+    font-size: 32px;
+  }
+}
