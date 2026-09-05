@@ -1,27 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createGame, applyMove } from '@/features/game/game.js';
-import { getLegalMoves, moveKey } from '@/features/game/moves.js';
-import { applyMoveToBoard } from '@/features/game/apply.js';
+import { createGame } from '@/features/game/game.js';
 import { WHITE } from '@/features/game/constants.js';
+import { play } from '@/test/game-helpers.js';
 import GameScreen from './GameScreen.jsx';
-
-// Busca un movimiento por su notación origen-destino entre los legales del turno
-function findMove(game, notation) {
-  return getLegalMoves(game.board, game.turn, {
-    castlingRights: game.castlingRights,
-    enPassantTarget: game.enPassantTarget,
-    applyMoveToBoardFn: applyMoveToBoard,
-  }).find((move) => moveKey(move) === notation);
-}
-
-// Aplica una jugada buscándola por notación
-function play(game, notation) {
-  const move = findMove(game, notation);
-  if (move === undefined) throw new Error(`Movimiento no legal: ${notation}`);
-  return applyMove(game, move);
-}
 
 // Posición con una jugada hecha para poder deshacer
 function gameWithHistory() {

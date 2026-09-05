@@ -1,5 +1,5 @@
-import { PIECE_TYPES, WHITE, PROMOTION_ROW, BOARD_SIZE } from './constants.js';
-import { toAlgebraic, getPiecesOfColor, switchPlayer } from './board.js';
+import { PIECE_TYPES, WHITE, PROMOTION_ROW } from './constants.js';
+import { toAlgebraic, getPiecesOfColor, switchPlayer, isInsideBoard as isInside } from './board.js';
 import { applyMoveToBoard } from './apply.js';
 import {
   getPseudoLegalTargets,
@@ -33,10 +33,6 @@ const KNIGHT_OFFSETS = [
   { row: 2, col: -1 },
   { row: 2, col: 1 },
 ];
-
-function isInside(row, col) {
-  return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
-}
 
 // Encuentra la posición del rey de un bando
 export function findKing(board, color) {
@@ -138,7 +134,7 @@ function createBaseMove(from, to, piece) {
 }
 
 // Genera los movimientos pseudolegales del bando indicado (sin validar jaques)
-export function getPseudoLegalMoves(board, color) {
+function getPseudoLegalMoves(board, color) {
   const moves = [];
   for (const { piece, row, col } of getPiecesOfColor(board, color)) {
     const targets = getPseudoLegalTargets(board, row, col);
@@ -160,7 +156,7 @@ export function getPseudoLegalMoves(board, color) {
 // Genera los movimientos de captura al paso: peones propios adyacentes al objetivo.
 // El movimiento se añade aquí (no existe en el avance pseudolegal) y su legalidad
 // final (incluida la variante del peón clavado al paso) la valida el filtro de jaques.
-export function annotateEnPassant(moves, board, color, enPassantTarget) {
+function annotateEnPassant(moves, board, color, enPassantTarget) {
   if (enPassantTarget === null) return moves;
   const result = [...moves];
   // El peón capturador se encuentra una fila por detrás del objetivo, según su avance
@@ -186,7 +182,7 @@ export function annotateEnPassant(moves, board, color, enPassantTarget) {
 }
 
 // Añade los enroques permitidos: derechos vigentes, camino libre y casillas seguras
-export function annotateCastling(moves, board, color, castlingRights) {
+function annotateCastling(moves, board, color, castlingRights) {
   const result = [...moves];
   const kingRow = KING_START_ROWS[color];
   for (const side of ['kingSide', 'queenSide']) {
@@ -243,7 +239,12 @@ function expandPromotions(moves, color) {
   const expanded = [];
   for (const move of moves) {
     if (move.piece === PIECE_TYPES.PAWN && move.to.row === PROMOTION_ROW[color]) {
-      for (const promotionType of ['queen', 'rook', 'bishop', 'knight']) {
+      for (const promotionType of [
+        PIECE_TYPES.QUEEN,
+        PIECE_TYPES.ROOK,
+        PIECE_TYPES.BISHOP,
+        PIECE_TYPES.KNIGHT,
+      ]) {
         expanded.push({ ...move, promotion: promotionType });
       }
     } else {
