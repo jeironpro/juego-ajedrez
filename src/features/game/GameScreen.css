@@ -3,21 +3,33 @@
   flex-direction: column;
   gap: var(--spacing-xl);
   width: 100%;
-  max-width: 800px;
-  margin: auto;
+  max-width: 980px;
+  margin: 0 auto;
   padding: var(--spacing-xl);
 }
 
-/* Tablero central con las bandejas de capturas pegadas a cada lateral */
+/* Fila con el tablero centrado y las bandejas de capturas a cada lateral.
+   Los contenedores laterales y central existen siempre: así el tablero nunca
+   salta de posición cuando aparecen o desaparecen capturas */
 .game-screen__board-area {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-md);
 }
 
-.game-screen__board-area .captured-pieces {
-  justify-self: center;
+.game-screen__board-side {
+  display: flex;
+  justify-content: center;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.game-screen__board-slot {
+  display: flex;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .game-screen__controls {

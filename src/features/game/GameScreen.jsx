@@ -69,15 +69,21 @@ function GameScreen({
         turn={game.turn}
       />
       <div className="game-screen__board-area">
-        <CapturedPieces pieces={player1Captures} ownerName={player1Name} />
-        <Chessboard
-          board={game.board}
-          turn={game.turn}
-          lastMove={game.lastMove}
-          disabled={game.over || botTurn}
-          onMove={onMove}
-        />
-        <CapturedPieces pieces={player2Captures} ownerName={player2Name} />
+        <div className="game-screen__board-side game-screen__board-side--left">
+          <CapturedPieces pieces={player1Captures} ownerName={player1Name} />
+        </div>
+        <div className="game-screen__board-slot">
+          <Chessboard
+            board={game.board}
+            turn={game.turn}
+            lastMove={game.lastMove}
+            disabled={game.over || botTurn}
+            onMove={onMove}
+          />
+        </div>
+        <div className="game-screen__board-side game-screen__board-side--right">
+          <CapturedPieces pieces={player2Captures} ownerName={player2Name} />
+        </div>
       </div>
       <div className="game-screen__controls">
         {status !== null && (
