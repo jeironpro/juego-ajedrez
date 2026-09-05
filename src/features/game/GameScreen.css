@@ -1,42 +1,67 @@
 .game-screen {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
+  /* Ancho máximo común de marcador y tablero: limita por altura para no hacer
+     scroll y por ancho para que ambos compartan la misma columna central */
+  --board-max: min(760px, calc(100dvh - 360px));
+  --board-gutter: clamp(40px, 5vw, 88px);
+
+  display: grid;
+  grid-template-columns: var(--board-gutter) minmax(0, 1fr) var(--board-gutter);
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  justify-items: center;
+  column-gap: var(--spacing-md);
+  row-gap: var(--spacing-lg);
   width: 100%;
-  max-width: 980px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: var(--spacing-lg) var(--spacing-xl);
 }
 
-/* Fila con el tablero centrado y las bandejas de capturas a cada lateral.
-   Los laterales tienen un ancho fijo (siempre reservado): el tablero conserva
-   su tamaño y posición aunque aparezcan o desaparezcan capturas */
-.game-screen__board-area {
+/* Marcador, tablero y controles ocupan la columna central: así el marcador
+   tiene exactamente el mismo ancho que el tablero */
+.game-screen__score {
+  grid-column: 2;
+  grid-row: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: var(--spacing-md);
+  width: 100%;
 }
 
-.game-screen__board-side {
+.game-screen__board {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
   justify-content: center;
-  flex: 0 0 clamp(40px, 5vw, 88px);
-  min-width: 0;
-}
-
-.game-screen__board-slot {
-  display: flex;
-  justify-content: center;
-  flex: 1 1 auto;
+  width: 100%;
   min-width: 0;
 }
 
 .game-screen__controls {
+  grid-column: 2;
+  grid-row: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-sm);
+  width: 100%;
+}
+
+/* Bandejas de capturas en los laterales (columna fija): su contenido no altera
+   la posición ni el tamaño del tablero */
+.game-screen__side {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.game-screen__side--left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.game-screen__side--right {
+  grid-column: 3;
+  grid-row: 2;
 }
 
 .game-screen__actions {

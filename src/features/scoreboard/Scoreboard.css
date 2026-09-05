@@ -1,7 +1,9 @@
 .scoreboard {
+  /* --board-max lo define la pantalla de juego: el marcador comparte el ancho
+     máximo del tablero */
   width: 100%;
-  max-width: 760px;
-  margin: 0 auto;
+  max-width: var(--board-max, 760px);
+  margin: 0;
   padding: var(--spacing-lg) var(--spacing-xl);
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
