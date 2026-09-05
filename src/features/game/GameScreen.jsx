@@ -46,30 +46,30 @@ function GameScreen({
 
   return (
     <div className="game-screen">
-      <Scoreboard
-        player1Name={player1Name}
-        player2Name={player2Name}
-        player1Pieces={player1Pieces}
-        player2Pieces={player2Pieces}
-        badge={badge}
-        turn={game.turn}
-      />
-      <div className="game-screen__board-area">
-        <div className="game-screen__board-side game-screen__board-side--left">
-          <CapturedPieces pieces={player1Captures} ownerName={player1Name} />
-        </div>
-        <div className="game-screen__board-slot">
-          <Chessboard
-            board={game.board}
-            turn={game.turn}
-            lastMove={game.lastMove}
-            disabled={game.over || botTurn}
-            onMove={onMove}
-          />
-        </div>
-        <div className="game-screen__board-side game-screen__board-side--right">
-          <CapturedPieces pieces={player2Captures} ownerName={player2Name} />
-        </div>
+      <div className="game-screen__score">
+        <Scoreboard
+          player1Name={player1Name}
+          player2Name={player2Name}
+          player1Pieces={player1Pieces}
+          player2Pieces={player2Pieces}
+          badge={badge}
+          turn={game.turn}
+        />
+      </div>
+      <div className="game-screen__side game-screen__side--left">
+        <CapturedPieces pieces={player1Captures} ownerName={player1Name} />
+      </div>
+      <div className="game-screen__board">
+        <Chessboard
+          board={game.board}
+          turn={game.turn}
+          lastMove={game.lastMove}
+          disabled={game.over || botTurn}
+          onMove={onMove}
+        />
+      </div>
+      <div className="game-screen__side game-screen__side--right">
+        <CapturedPieces pieces={player2Captures} ownerName={player2Name} />
       </div>
       <div className="game-screen__controls">
         {status !== null && (
