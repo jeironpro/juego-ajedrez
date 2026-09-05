@@ -82,7 +82,8 @@
   opacity: 0.85;
 }
 
-/* Glifo de la pieza: escala con el ancho del tablero (container query) */
+/* Glifo de la pieza: escala con el ancho del tablero (container query). Ambos
+   bandos comparten la misma silueta rellena; el borde y el color los distinguen */
 .piece {
   font-size: clamp(26px, 5.5vw, 64px);
   font-size: 9.2cqw;
@@ -91,16 +92,32 @@
   user-select: none;
 }
 
+/* Trazo de 8 direcciones con el color del bando contrario, para que la pieza
+   blanca (relleno claro) y la negra (relleno oscuro) se lean sobre cualquier casilla */
 .piece--white {
   color: var(--color-piece-white);
   text-shadow:
-    0 0 1.5px var(--color-piece-black-border),
-    0 1px 2px rgb(0 0 0 / 0.45);
+    0.06em 0 0 var(--color-piece-black-border),
+    -0.06em 0 0 var(--color-piece-black-border),
+    0 0.06em 0 var(--color-piece-black-border),
+    0 -0.06em 0 var(--color-piece-black-border),
+    0.04em 0.04em 0 var(--color-piece-black-border),
+    -0.04em 0.04em 0 var(--color-piece-black-border),
+    0.04em -0.04em 0 var(--color-piece-black-border),
+    -0.04em -0.04em 0 var(--color-piece-black-border),
+    0 2px 4px rgb(0 0 0 / 0.35);
 }
 
 .piece--black {
   color: var(--color-piece-black);
   text-shadow:
-    0 0 1.5px rgb(255 255 255 / 0.5),
-    0 1px 1px rgb(0 0 0 / 0.2);
+    0.06em 0 0 var(--color-piece-white-border),
+    -0.06em 0 0 var(--color-piece-white-border),
+    0 0.06em 0 var(--color-piece-white-border),
+    0 -0.06em 0 var(--color-piece-white-border),
+    0.04em 0.04em 0 var(--color-piece-white-border),
+    -0.04em 0.04em 0 var(--color-piece-white-border),
+    0.04em -0.04em 0 var(--color-piece-white-border),
+    -0.04em -0.04em 0 var(--color-piece-white-border),
+    0 1px 3px rgb(0 0 0 / 0.25);
 }

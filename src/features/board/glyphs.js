@@ -1,15 +1,16 @@
 import { PIECE_TYPES, PIECE_VALUES, WHITE, BLACK } from '@/features/game/constants.js';
 
-// Glifos Unicode de las piezas: el conjunto blanco se dibuja como contorno y el
-// negro como silueta rellena, la convención habitual en tableros de texto
+// Glifos Unicode de las piezas: ambos bandos comparten el mismo conjunto relleno
+// para que el diseño sea idéntico; la diferencia la aporta el color (CSS) y no
+// la silueta de la fuente
 export const PIECE_GLYPHS = {
   [WHITE]: {
-    [PIECE_TYPES.KING]: '♔',
-    [PIECE_TYPES.QUEEN]: '♕',
-    [PIECE_TYPES.ROOK]: '♖',
-    [PIECE_TYPES.BISHOP]: '♗',
-    [PIECE_TYPES.KNIGHT]: '♘',
-    [PIECE_TYPES.PAWN]: '♙',
+    [PIECE_TYPES.KING]: '♚',
+    [PIECE_TYPES.QUEEN]: '♛',
+    [PIECE_TYPES.ROOK]: '♜',
+    [PIECE_TYPES.BISHOP]: '♝',
+    [PIECE_TYPES.KNIGHT]: '♞',
+    [PIECE_TYPES.PAWN]: '♟',
   },
   [BLACK]: {
     [PIECE_TYPES.KING]: '♚',
