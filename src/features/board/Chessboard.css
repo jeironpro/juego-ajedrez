@@ -3,7 +3,9 @@
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(8, 1fr);
   width: 100%;
-  max-width: 760px;
+  /* El tope por altura evita que la página haga scroll: el tablero cede
+     espacio vertical a marcador y controles según la altura de la ventana */
+  max-width: min(760px, calc(100dvh - 360px));
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: var(--radius-lg);
