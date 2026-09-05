@@ -1,0 +1,75 @@
+/* Tokens de diseño — la fuente de verdad es docs/style-guide.md (referencia: berd.xyz) */
+
+:root {
+  /* Paleta de colores: neutros */
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-muted: #f0f0f0;
+  --color-text-primary: #242424;
+  --color-text-secondary: #7f7f7f;
+  --color-text-placeholder: #cccccc;
+  --color-border: #e8e8e8;
+
+  /* Acento primario: casi negro, el color solo comunica acción o selección */
+  --color-primary: #242424;
+  --color-primary-hover: #3d3d3d;
+  --color-primary-active: #1a1a1a;
+  --color-primary-foreground: #ffffff;
+
+  /* Estados de feedback: solo comunican estado, nunca decoración */
+  --color-success: #73b468;
+  --color-error: #dc2626;
+  --color-warning: #fbcd44;
+  --color-info: #5c98f9;
+
+  /* Tablero y piezas 3D */
+  --color-board-light: #efeae4;
+  --color-board-dark: #b9ac98;
+  --color-piece-white: #f5f4f2;
+  --color-piece-white-border: #d8d3cb;
+  --color-piece-black: #2e2b28;
+  --color-piece-black-border: #1c1a18;
+  --color-selection: #5c98f9;
+  --color-move-hint: #73b468;
+  --color-last-move: #fbcd44;
+  --color-capture-hint: #dc2626;
+
+  /* Tipografía */
+  --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-display: 2rem;
+  --font-size-title: 1.5rem;
+  --font-size-subtitle: 1.125rem;
+  --font-size-body: 1rem;
+  --font-size-label: 0.875rem;
+  --font-size-caption: 0.75rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Espaciado */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 0.75rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.5rem;
+  --spacing-xxl: 2rem;
+  --spacing-xxxl: 3rem;
+  --spacing-xxxxl: 4rem;
+
+  /* Radios: botones y píldoras redondeados al máximo, cards suaves */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+
+  /* Sombras: superficies planas en reposo, elevación solo al interactuar */
+  --shadow-sm: 0 2px 8px rgb(0 0 0 / 0.15);
+  --shadow-md: 0 3px 12px rgb(0 0 0 / 0.22);
+  --shadow-lg: 0 8px 30px rgb(0 0 0 / 0.12);
+  --shadow-xl: 0 20px 60px rgb(0 0 0 / 0.2);
+
+  /* Foco visible */
+  --focus-ring: 0 0 0 3px rgb(36 36 36 / 0.25);
+}
