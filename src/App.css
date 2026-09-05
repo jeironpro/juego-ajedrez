@@ -4,3 +4,10 @@
   min-height: 100dvh;
   padding: var(--spacing-lg) 0;
 }
+
+/* Menos margen vertical en ventanas bajas: más altura disponible para el tablero */
+@media (max-height: 720px) {
+  .app {
+    padding: var(--spacing-sm) 0;
+  }
+}

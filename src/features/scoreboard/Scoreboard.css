@@ -81,3 +81,37 @@
   background-color: var(--color-muted);
   border-radius: var(--radius-full);
 }
+
+/* Marcador compacto en ventanas poco altas: cede altura al tablero */
+@media (max-height: 720px) {
+  .scoreboard {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .scoreboard__names {
+    margin-top: 0;
+  }
+
+  .scoreboard__counts {
+    margin-top: var(--spacing-xs);
+  }
+
+  .scoreboard__count {
+    font-size: var(--font-size-title);
+  }
+
+  .scoreboard__badge {
+    padding: 2px var(--spacing-md);
+  }
+}
+
+/* Alturas muy reducidas (móvil en horizontal): se omite la insignia */
+@media (max-height: 440px) {
+  .scoreboard {
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+
+  .scoreboard__badge {
+    display: none;
+  }
+}
