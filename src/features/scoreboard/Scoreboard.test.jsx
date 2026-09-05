@@ -4,21 +4,26 @@ import { WHITE, BLACK } from '@/features/game/constants.js';
 import Scoreboard from './Scoreboard.jsx';
 
 describe('Scoreboard', () => {
-  it('muestra los nombres, los contadores y el marcador vs', () => {
+  it('muestra los nombres y las piezas restantes de cada jugador', () => {
     render(
       <Scoreboard
         player1Name="TÚ"
         player2Name="BOT"
-        player1Score={3}
-        player2Score={1}
+        player1Pieces={16}
+        player2Pieces={12}
         turn={WHITE}
       />,
     );
     expect(screen.getByText('TÚ')).toBeInTheDocument();
     expect(screen.getByText('BOT')).toBeInTheDocument();
-    expect(screen.getByText('3')).toBeInTheDocument();
-    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.getByText('16')).toBeInTheDocument();
+    expect(screen.getByText('12')).toBeInTheDocument();
     expect(screen.getByText('vs')).toBeInTheDocument();
+  });
+
+  it('arranca con 16 piezas por jugador cuando no se pasan contadores', () => {
+    render(<Scoreboard player1Name="TÚ" player2Name="BOT" turn={WHITE} />);
+    expect(screen.getAllByText('16')).toHaveLength(2);
   });
 
   it('muestra el badge de dificultad cuando se proporciona', () => {
@@ -26,8 +31,8 @@ describe('Scoreboard', () => {
       <Scoreboard
         player1Name="TÚ"
         player2Name="BOT"
-        player1Score={0}
-        player2Score={0}
+        player1Pieces={16}
+        player2Pieces={16}
         turn={WHITE}
         badge="Difícil"
       />,
@@ -40,8 +45,8 @@ describe('Scoreboard', () => {
       <Scoreboard
         player1Name="TÚ"
         player2Name="BOT"
-        player1Score={0}
-        player2Score={0}
+        player1Pieces={16}
+        player2Pieces={16}
         turn={WHITE}
       />,
     );
@@ -53,14 +58,14 @@ describe('Scoreboard', () => {
       <Scoreboard
         player1Name="TÚ"
         player2Name="BOT"
-        player1Score={0}
-        player2Score={0}
+        player1Pieces={16}
+        player2Pieces={16}
         turn={BLACK}
       />,
     );
-    const activeScore = container.querySelector('.scoreboard__score--active');
-    expect(activeScore).toHaveTextContent('0');
-    expect(activeScore.className).toContain('scoreboard__score--active');
-    expect(container.querySelectorAll('.scoreboard__score--active')).toHaveLength(1);
+    const activeCount = container.querySelector('.scoreboard__count--active');
+    expect(activeCount).toHaveTextContent('16');
+    expect(activeCount.className).toContain('scoreboard__count--active');
+    expect(container.querySelectorAll('.scoreboard__count--active')).toHaveLength(1);
   });
 });
