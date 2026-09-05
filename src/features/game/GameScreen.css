@@ -9,8 +9,8 @@
 }
 
 /* Fila con el tablero centrado y las bandejas de capturas a cada lateral.
-   Los contenedores laterales y central existen siempre: así el tablero nunca
-   salta de posición cuando aparecen o desaparecen capturas */
+   Los laterales tienen un ancho fijo (siempre reservado): el tablero conserva
+   su tamaño y posición aunque aparezcan o desaparezcan capturas */
 .game-screen__board-area {
   display: flex;
   align-items: center;
@@ -21,7 +21,7 @@
 .game-screen__board-side {
   display: flex;
   justify-content: center;
-  flex: 0 1 auto;
+  flex: 0 0 clamp(40px, 5vw, 88px);
   min-width: 0;
 }
 
